@@ -340,13 +340,13 @@ static void announce(void)
 #ifdef _VCS_REVISION
 	"(" _VCS_REVISION ")\n"
 #endif
-      "Copyright 2016, Vrije Universiteit, Amsterdam, The Netherlands\n" \
-      "========================================\n" \
-      "| Minix 3.4.0rc6 - SO - UNIFESP 2s2024 |\n" \
-      "|        Projeto 1 - Equipe 2          |\n" \
-      "========================================\n",
+      "Copyright 2016, Vrije Universiteit, Amsterdam, The Netherlands\n,
       OS_RELEASE);
   printf("MINIX is open source software, see http://www.minix3.org\n");
+  printf("========================================\n");
+  printf("| Minix 3.4.0rc6 - SO - UNIFESP 2s2024 |\n");
+  printf("|        Projeto 1 - Equipe 2          |\n");
+  printf("========================================\n");
 }
 
 /*===========================================================================*
