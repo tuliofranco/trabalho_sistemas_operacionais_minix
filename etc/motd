@@ -6,7 +6,7 @@ For more information on how to use MINIX 3, see the wiki:
 https://wiki.minix3.org
 
 We'd like your feedback: https://minix3.org/community/
-=================================================
-| OBRIGADO POR ESTAR AQUI - SO - UNIFESP 2s2024 |
-|              Projeto 1 - Equipe 2             |
-=================================================
+echo "================================================" > /etc/motd
+echo "| OBRIGADO POR ESTAR AQUI - SO - UNIFESP 2s2024 |" >> /etc/motd
+echo "|              Projeto 1 - Equipe 2             |" >> /etc/motd
+echo "=================================================" >> /etc/motd
