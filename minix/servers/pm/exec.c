@@ -50,7 +50,7 @@ do_exec(void)
 	m.VFS_PM_PS_STR = m_in.m_lc_pm_exec.ps_str;
 
 	/* Adiciona o printf para exibir o comando executado */
-	printf("Executando: %s\n", (char *)m_in.m_lc_pm_exec.name);
+	printf("Executando: @@@@@@@@@@@ \n");
 
 	tell_vfs(mp, &m);
 
