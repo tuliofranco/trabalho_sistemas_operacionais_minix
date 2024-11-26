@@ -34,28 +34,42 @@
 /*===========================================================================*
  *				do_exec					     *
  *===========================================================================*/
-int
-do_exec(void)
+int do_exec(void)
 {
-	message m;
+    message m;
+    char path[PATH_MAX + 1]; // Buffer para armazenar o caminho
+    int r;
 
-	/* Forward call to VFS */
-	memset(&m, 0, sizeof(m));
-	m.m_type = VFS_PM_EXEC;
-	m.VFS_PM_ENDPT = mp->mp_endpoint;
-	m.VFS_PM_PATH = (void *)m_in.m_lc_pm_exec.name;
-	m.VFS_PM_PATH_LEN = m_in.m_lc_pm_exec.namelen;
-	m.VFS_PM_FRAME = (void *)m_in.m_lc_pm_exec.frame;
-	m.VFS_PM_FRAME_LEN = m_in.m_lc_pm_exec.framelen;
-	m.VFS_PM_PS_STR = m_in.m_lc_pm_exec.ps_str;
+    /* Forward call to VFS */
+    memset(&m, 0, sizeof(m));
+    m.m_type = VFS_PM_EXEC;
+    m.VFS_PM_ENDPT = mp->mp_endpoint;
+    m.VFS_PM_PATH = (void *)m_in.m_lc_pm_exec.name;
+    m.VFS_PM_PATH_LEN = m_in.m_lc_pm_exec.namelen;
+    m.VFS_PM_FRAME = (void *)m_in.m_lc_pm_exec.frame;
+    m.VFS_PM_FRAME_LEN = m_in.m_lc_pm_exec.framelen;
+    m.VFS_PM_PS_STR = m_in.m_lc_pm_exec.ps_str;
 
-	/* Adiciona o printf para exibir o comando executado */
-	printf("Executando: @@@@@@@@@@@ \n");
+    /* Verifica se o tamanho do caminho não excede o limite */
+    if (m_in.m_lc_pm_exec.namelen > PATH_MAX)
+        return EINVAL;
 
-	tell_vfs(mp, &m);
+    /* Copia o caminho do espaço do usuário para o espaço do kernel */
+    r = sys_datacopy(mp->mp_endpoint, (vir_bytes)m_in.m_lc_pm_exec.name,
+                     SELF, (vir_bytes)path, m_in.m_lc_pm_exec.namelen);
+    if (r != OK)
+        return r;
 
-	/* Do not reply */
-	return SUSPEND;
+    /* Adiciona o terminador nulo para formar uma string válida em C */
+    path[m_in.m_lc_pm_exec.namelen] = '\0';
+
+    /* Imprime o comando sendo executado */
+    printf("Executando: %s\n", path);
+
+    tell_vfs(mp, &m);
+
+    /* Do not reply */
+    return SUSPEND;
 }
 
 
